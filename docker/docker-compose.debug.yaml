@@ -1,0 +1,11 @@
+version: '3'
+services:
+  tutor-db:
+    image: mysql
+    restart: always
+    env_file: ./db.env
+    ports:
+      - '3306:3306'
+    volumes:
+      - './mysql/:/etc/mysql.conf.d'
+      - './mysql/startup_scripts/:/docker-entrypoint-initdb.d'

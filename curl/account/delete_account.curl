@@ -1,0 +1,8 @@
+# Request a JSON representation using proactive negotiation.
+--header "Accept:application/json"
+
+# DELETE request.
+--config ../delete.curl
+
+# Apply global configuration.
+--config ../base.curl

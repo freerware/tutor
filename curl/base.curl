@@ -1,0 +1,5 @@
+# dumps the headers to the standard error stream.
+--dump-header "/dev/stderr"
+
+# enables silent mode to remove progress bar.
+--silent

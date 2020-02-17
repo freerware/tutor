@@ -1,0 +1,13 @@
+server:
+    host: ${SERVER_HOST}
+    port: ${SERVER_PORT}
+
+database:
+    name: ${DB_NAME}
+    host: ${DB_HOST}
+    port: ${DB_PORT}
+    user: ${DB_USER}
+    password: ${DB_PASSWORD}
+    parseTime: ${DB_PARSE_TIME}
+    charset: ${DB_CHARSET}
+

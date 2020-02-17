@@ -1,0 +1,15 @@
+
+# Request a JSON representation using proactive negotiation.
+--header "Accept:application/json"
+
+# Indicate the media type of the provided representation.
+--header "Content-Type:application/json"
+
+# Body of the request.
+--data @./put_notification.json
+
+# PUT request.
+--config ../put.curl
+
+# Apply global configuration.
+--config ../base.curl

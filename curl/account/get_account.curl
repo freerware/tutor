@@ -1,0 +1,11 @@
+# Request a JSON representation using proactive negotiation.
+--header "Accept:application/json"
+
+# Provide authorization token.
+--header "Authorization: Basic ZnJlZXI6cGlzZm9ycGFzc3dvcmQ="
+
+# GET request.
+--config ../get.curl
+
+# Apply global configuration.
+--config ../base.curl

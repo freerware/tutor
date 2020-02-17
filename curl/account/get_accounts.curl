@@ -1,0 +1,8 @@
+# Request a JSON representation using proactive negotiation.
+--header "Accept:application/json"
+
+# GET request.
+--config ../get.curl
+
+# Apply global configuration.
+--config ../base.curl

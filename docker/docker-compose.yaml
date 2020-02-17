@@ -1,0 +1,19 @@
+version: '3'
+services:
+  tutor:
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile
+    env_file: ./tutor.env
+    ports:
+      - '8000:8000'
+    depends_on:
+      - tutor-db
+
+  tutor-db:
+    image: mysql
+    restart: always
+    env_file: ./db.env
+    volumes:
+      - './mysql/:/etc/mysql.conf.d'
+      - './mysql/startup_scripts/:/docker-entrypoint-initdb.d'

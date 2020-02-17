@@ -1,0 +1,14 @@
+# Request a JSON representation using proactive negotiation.
+--header "Accept:application/json"
+
+# Indicate the media type of the provided representation.
+--header "Content-Type:application/json"
+
+# Body of the request.
+--data @./post_account.json
+
+# POST request.
+--config ../post.curl
+
+# Apply global configuration.
+--config ../base.curl
