@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package tutor;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/freerware/tutor/api/representations/protobuf/gen";
+
+message Account {
+  string UUID                         = 1;
+  string username                     = 2;
+  string givenName                    = 3;
+  string surname                      = 4;
+  google.protobuf.Timestamp createdAt = 5;
+  google.protobuf.Timestamp updatedAt = 6;
+  google.protobuf.Timestamp deletedAt = 7;
+}

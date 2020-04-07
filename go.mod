@@ -11,9 +11,11 @@ require (
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/go-yaml/yaml v2.1.0+incompatible
 	github.com/gofrs/uuid v3.2.0+incompatible
+	github.com/golang/protobuf v1.4.0-rc.4
 	github.com/gorilla/mux v1.7.4
 	github.com/uber-go/tally v3.3.15+incompatible // indirect
 	go.uber.org/fx v1.10.0
 	go.uber.org/zap v1.13.0
+	google.golang.org/protobuf v1.20.1
 	gopkg.in/yaml.v2 v2.2.2
 )

@@ -10,6 +10,7 @@ import (
 	"github.com/freerware/negotiator/proactive"
 	"github.com/freerware/negotiator/representation"
 	j "github.com/freerware/tutor/api/representations/json"
+	p "github.com/freerware/tutor/api/representations/protobuf"
 	x "github.com/freerware/tutor/api/representations/xml"
 	y "github.com/freerware/tutor/api/representations/yaml"
 	"github.com/freerware/tutor/api/server"
@@ -78,7 +79,9 @@ func (ar *AccountResource) Get(w http.ResponseWriter, request *http.Request) {
 	yacc.SetContentLocation(*request.URL)
 	xacc := x.NewAccount(account)
 	xacc.SetContentLocation(*request.URL)
-	representations := []representation.Representation{jacc, yacc, xacc, gjacc}
+	pacc := p.NewAccount(account)
+	pacc.SetContentLocation(*request.URL)
+	representations := []representation.Representation{jacc, yacc, xacc, gjacc, pacc}
 
 	// negotiate.
 	ctx := negotiator.NegotiationContext{Request: request, ResponseWriter: w}
