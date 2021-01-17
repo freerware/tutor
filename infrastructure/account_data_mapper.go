@@ -1,12 +1,13 @@
 package infrastructure
 
 import (
+	"context"
 	"database/sql"
 	"errors"
 	"strings"
 
 	"github.com/freerware/tutor/domain"
-
+	"github.com/freerware/work/v4/unit"
 	"go.uber.org/fx"
 	"go.uber.org/zap"
 )
@@ -49,7 +50,7 @@ func (dm *AccountDataMapper) toAccount(accounts ...interface{}) ([]domain.Accoun
 	return accs, nil
 }
 
-func (dm *AccountDataMapper) Insert(tx *sql.Tx, accounts ...interface{}) error {
+func (dm *AccountDataMapper) Insert(ctx context.Context, mCtx unit.MapperContext, accounts ...interface{}) error {
 	if len(accounts) == 0 {
 		return nil
 	}
@@ -57,7 +58,7 @@ func (dm *AccountDataMapper) Insert(tx *sql.Tx, accounts ...interface{}) error {
 	if err != nil {
 		return err
 	}
-	return dm.insert(tx, accs...)
+	return dm.insert(mCtx.Tx, accs...)
 }
 
 func (dm *AccountDataMapper) insertSQL(accounts ...domain.Account) (sql string, args []interface{}) {
@@ -95,7 +96,7 @@ func (dm *AccountDataMapper) insert(tx *sql.Tx, accounts ...domain.Account) erro
 	return dm.prepareAndExec(tx, sql, args)
 }
 
-func (dm *AccountDataMapper) Update(tx *sql.Tx, accounts ...interface{}) error {
+func (dm *AccountDataMapper) Update(ctx context.Context, mCtx unit.MapperContext, accounts ...interface{}) error {
 	if len(accounts) == 0 {
 		return nil
 	}
@@ -103,7 +104,7 @@ func (dm *AccountDataMapper) Update(tx *sql.Tx, accounts ...interface{}) error {
 	if err != nil {
 		return err
 	}
-	return dm.update(tx, accs...)
+	return dm.update(mCtx.Tx, accs...)
 }
 
 func (dm *AccountDataMapper) updateSQL(
@@ -146,7 +147,7 @@ func (dm *AccountDataMapper) update(tx *sql.Tx, accounts ...domain.Account) erro
 	return nil
 }
 
-func (dm *AccountDataMapper) Delete(tx *sql.Tx, accounts ...interface{}) error {
+func (dm *AccountDataMapper) Delete(ctx context.Context, mCtx unit.MapperContext, accounts ...interface{}) error {
 	if len(accounts) == 0 {
 		return nil
 	}
@@ -154,7 +155,7 @@ func (dm *AccountDataMapper) Delete(tx *sql.Tx, accounts ...interface{}) error {
 	if err != nil {
 		return err
 	}
-	return dm.delete(tx, accs...)
+	return dm.delete(mCtx.Tx, accs...)
 }
 
 func (dm *AccountDataMapper) deleteSQL(
