@@ -9,5 +9,6 @@ COPY tutor /go
 COPY configuration.yaml /go
 
 # execute the binary.
+RUN chmod +x /go/tutor
 CMD ["./tutor"]
 

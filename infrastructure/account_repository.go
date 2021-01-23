@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"github.com/freerware/tutor/domain"
-	"github.com/freerware/work"
+	"github.com/freerware/work/v4/unit"
 	u "github.com/gofrs/uuid"
 )
 
@@ -20,11 +20,11 @@ type AccountRepository interface {
 }
 
 type accountRepository struct {
-	unit    work.Unit
+	unit    unit.Unit
 	queryer Queryer
 }
 
-func NewAccountRepository(unit work.Unit, queryer Queryer) AccountRepository {
+func NewAccountRepository(unit unit.Unit, queryer Queryer) AccountRepository {
 	return &accountRepository{unit: unit, queryer: queryer}
 }
 

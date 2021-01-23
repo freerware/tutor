@@ -1,11 +1,12 @@
 package application
 
 import (
+	"context"
 	"errors"
 
 	"github.com/freerware/tutor/domain"
 	"github.com/freerware/tutor/infrastructure"
-	"github.com/freerware/work"
+	"github.com/freerware/work/v4/unit"
 	u "github.com/gofrs/uuid"
 	"go.uber.org/fx"
 )
@@ -13,14 +14,14 @@ import (
 // AccountService encapsulates the various operations
 // our application offers for user accounts.
 type AccountService struct {
-	uniter  work.Uniter
+	uniter  unit.Uniter
 	queryer infrastructure.Queryer
 }
 
 type AccountServiceParameters struct {
 	fx.In
 
-	Uniter  work.Uniter `name:"sqlWorkUniter"`
+	Uniter  unit.Uniter `name:"uniter"`
 	Queryer infrastructure.Queryer
 }
 
@@ -50,7 +51,7 @@ func (a *AccountService) Get(uuid u.UUID) (domain.Account, error) {
 }
 
 // Create creates a new account.
-func (a *AccountService) Create(account domain.Account) error {
+func (a *AccountService) Create(ctx context.Context, account domain.Account) error {
 	unit, err := a.uniter.Unit()
 	if err != nil {
 		return err
@@ -59,11 +60,11 @@ func (a *AccountService) Create(account domain.Account) error {
 	if err = repository.Add(account); err != nil {
 		return err
 	}
-	return unit.Save()
+	return unit.Save(ctx)
 }
 
 // Put upserts an account.
-func (a *AccountService) Put(account domain.Account) error {
+func (a *AccountService) Put(ctx context.Context, account domain.Account) error {
 	unit, err := a.uniter.Unit()
 	if err != nil {
 		return err
@@ -72,11 +73,11 @@ func (a *AccountService) Put(account domain.Account) error {
 	if err = repository.Put(account); err != nil {
 		return err
 	}
-	return unit.Save()
+	return unit.Save(ctx)
 }
 
 // Delete deletes an existing account.
-func (a *AccountService) Delete(account domain.Account) error {
+func (a *AccountService) Delete(ctx context.Context, account domain.Account) error {
 	unit, err := a.uniter.Unit()
 	if err != nil {
 		return err
@@ -85,5 +86,5 @@ func (a *AccountService) Delete(account domain.Account) error {
 	if err = repository.Remove(account); err != nil {
 		return err
 	}
-	return unit.Save()
+	return unit.Save(ctx)
 }
