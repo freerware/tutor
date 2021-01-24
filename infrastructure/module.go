@@ -65,8 +65,6 @@ var Module = fx.Options(
 	}),
 	fx.Provide(func(c config.Configuration) (tally.Scope, error) {
 		addr := fmt.Sprintf("%s:%d", c.Metrics.Host, c.Metrics.Port)
-		fmt.Println("connecting metrics reporter to:", addr)
-		fmt.Println("prefix:", c.Metrics.Prefix)
 		flushInterval := time.Duration(c.Metrics.MaxFlushInterval) * time.Millisecond
 		statter, err :=
 			statsd.NewBufferedClient(
