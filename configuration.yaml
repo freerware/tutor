@@ -12,8 +12,8 @@ database:
     charset: ${DB_CHARSET}
 
 metrics:
-    host: ${REPORTING_HOST:-127.0.0.1}
-    port: ${REPORTING_PORT:-8125}
+    host: ${REPORTING_HOST}
+    port: ${REPORTING_PORT}
     prefix: tutor
-    maxFlushInterval: ${REPORTING_MAX_FLUSH_INTERVAL:-150}
-    maxFlushBytes: ${REPORTING_MAX_FLUSH_BYTES:-512}
+    maxFlushInterval: ${REPORTING_MAX_FLUSH_INTERVAL}
+    maxFlushBytes: ${REPORTING_MAX_FLUSH_BYTES}
