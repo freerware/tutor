@@ -5,9 +5,7 @@ go 1.12
 require (
 	github.com/avast/retry-go v3.0.0+incompatible
 	github.com/cactus/go-statsd-client v3.1.0+incompatible
-	github.com/cactus/go-statsd-client/v5 v5.0.0
 	github.com/freerware/negotiator v0.2.0
-	github.com/freerware/work v2.0.1+incompatible // indirect
 	github.com/freerware/work/v4 v4.0.0-beta
 	github.com/freerware/workfx/v4 v4.0.0-20210117042742-a219b58a7eb3
 	github.com/go-sql-driver/mysql v1.5.0
