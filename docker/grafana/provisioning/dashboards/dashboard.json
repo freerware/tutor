@@ -24,6 +24,99 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "tutor",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "hiddenSeries": false,
+      "id": 2,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 3,
+      "nullPointMode": "connected",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "7.3.7",
+      "pointradius": 3,
+      "points": true,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "refId": "A",
+          "target": "stats.tutor.unit.save.success"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Unit Save Success",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "tutor",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -34,9 +127,9 @@
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 8,
+        "h": 9,
         "w": 12,
-        "x": 0,
+        "x": 12,
         "y": 0
       },
       "hiddenSeries": false,
@@ -148,7 +241,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 8
+        "y": 9
       },
       "hiddenSeries": false,
       "id": 4,
@@ -229,6 +322,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "tutor",
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "custom": {}
@@ -238,13 +332,13 @@
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 9,
+        "h": 8,
         "w": 12,
-        "x": 0,
-        "y": 16
+        "x": 12,
+        "y": 9
       },
       "hiddenSeries": false,
-      "id": 2,
+      "id": 7,
       "legend": {
         "avg": false,
         "current": false,
@@ -271,15 +365,33 @@
       "steppedLine": false,
       "targets": [
         {
+          "refCount": 0,
           "refId": "A",
-          "target": "stats.tutor.unit.save.success"
+          "target": "alias(stats.timers.tutor.unit.rollback.mean, 'mean')"
+        },
+        {
+          "refCount": 0,
+          "refId": "C",
+          "target": "alias(stats.timers.tutor.unit.rollback.median, 'median')"
+        },
+        {
+          "refCount": 0,
+          "refId": "D",
+          "target": "alias(stats.timers.tutor.unit.rollback.upper, 'upper')"
+        },
+        {
+          "hide": false,
+          "refCount": 0,
+          "refId": "E",
+          "target": "alias(stats.timers.tutor.unit.rollback.lower, 'lower')",
+          "textEditor": false
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Unit Save Success",
+      "title": "Unit Rollback Duration",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -317,7 +429,7 @@
       }
     }
   ],
-  "refresh": false,
+  "refresh": "5s",
   "schemaVersion": 26,
   "style": "dark",
   "tags": [],
@@ -325,8 +437,8 @@
     "list": []
   },
   "time": {
-    "from": "2021-01-24T20:41:02.214Z",
-    "to": "2021-01-24T20:46:35.958Z"
+    "from": "now-5m",
+    "to": "now"
   },
   "timepicker": {},
   "timezone": "",
