@@ -33,6 +33,7 @@ func NewDefault() (Configuration, error) {
 type Configuration struct {
 	Server   ServerConfiguration
 	Database DatabaseConfiguration
+	Metrics  MetricsConfiguration
 }
 
 type ServerConfiguration struct {
@@ -53,4 +54,12 @@ type DatabaseConfiguration struct {
 func (c DatabaseConfiguration) DSN() string {
 	return fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?parseTime=%t&charset=%s",
 		c.User, c.Password, c.Host, c.Port, c.Name, c.ParseTime, c.Charset)
+}
+
+type MetricsConfiguration struct {
+	Host             string
+	Port             int
+	Prefix           string
+	MaxFlushInterval int `yaml:"maxFlushInterval"`
+	MaxFlushBytes    int `yaml:"maxFlushBytes"`
 }

@@ -6,11 +6,14 @@ import (
 	"time"
 
 	"github.com/avast/retry-go"
+	"github.com/cactus/go-statsd-client/statsd"
 	"github.com/freerware/tutor/config"
 	"github.com/freerware/tutor/domain"
 	"github.com/freerware/work/v4/unit"
 	"github.com/freerware/workfx/v4"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/uber-go/tally"
+	tstatsd "github.com/uber-go/tally/statsd"
 	"go.uber.org/fx"
 	"go.uber.org/zap"
 )
@@ -18,7 +21,7 @@ import (
 type UnitResult struct {
 	fx.Out
 
-	Options []unit.Option `group:"unitOptions"`
+	Option unit.Option `group:"unitOptions"`
 }
 
 type DBResult struct {
@@ -27,11 +30,10 @@ type DBResult struct {
 	DB *sql.DB `name:"rwDB"`
 }
 
-type UnitParameters struct {
+type DBParameters struct {
 	fx.In
 
-	Logger *zap.Logger
-	DB     *sql.DB `name:"rwDB"`
+	DB *sql.DB `name:"rwDB"`
 }
 
 var Module = fx.Options(
@@ -61,19 +63,39 @@ var Module = fx.Options(
 		}
 		return DBResult{DB: db}, nil
 	}),
-	fx.Provide(func(parameters UnitParameters) UnitResult {
+	fx.Provide(func(c config.Configuration) (tally.Scope, error) {
+		addr := fmt.Sprintf("%s:%d", c.Metrics.Host, c.Metrics.Port)
+		flushInterval := time.Duration(c.Metrics.MaxFlushInterval) * time.Millisecond
+		statter, err :=
+			statsd.NewBufferedClient(
+				addr, c.Metrics.Prefix, flushInterval, c.Metrics.MaxFlushBytes)
+		if err != nil {
+			return nil, err
+		}
+		reporter := tstatsd.NewReporter(statter, tstatsd.Options{
+			SampleRate: 1.0,
+		})
+		scope, _ := tally.NewRootScope(tally.ScopeOptions{
+			Tags:     map[string]string{},
+			Reporter: reporter,
+		}, time.Second)
+		return scope, nil
+	}),
+	fx.Provide(func(l *zap.Logger) UnitResult {
 		dataMappers := make(map[unit.TypeName]unit.DataMapper)
 		accountTN := unit.TypeNameOf(domain.Account{})
-		dm := NewAccountDataMapper(AccountDataMapperParameters{
-			Logger: parameters.Logger,
-		})
+		dm := NewAccountDataMapper(AccountDataMapperParameters{Logger: l})
 		dataMappers[accountTN] = &dm
-		result := UnitResult{Options: []unit.Option{
-			unit.DataMappers(dataMappers),
-			unit.Logger(parameters.Logger),
-			unit.DB(parameters.DB),
-		}}
-		return result
+		return UnitResult{Option: unit.DataMappers(dataMappers)}
+	}),
+	fx.Provide(func(l *zap.Logger) UnitResult {
+		return UnitResult{Option: unit.Logger(l)}
+	}),
+	fx.Provide(func(s tally.Scope) UnitResult {
+		return UnitResult{Option: unit.Scope(s)}
+	}),
+	fx.Provide(func(parameters DBParameters) UnitResult {
+		return UnitResult{Option: unit.DB(parameters.DB)}
 	}),
 	workfx.Module,
 )

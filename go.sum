@@ -5,13 +5,13 @@ github.com/DATA-DOG/go-sqlmock v1.5.0 h1:Shsta01QNfFxHCfpW6YH2STWB0MudeXXEWMr20O
 github.com/DATA-DOG/go-sqlmock v1.5.0/go.mod h1:f/Ixk793poVmq4qj/V1dPUg2JEAKC73Q5eFN3EC/SaM=
 github.com/avast/retry-go v3.0.0+incompatible h1:4SOWQ7Qs+oroOTQOYnAHqelpCO0biHSxpiH9JdtuBj0=
 github.com/avast/retry-go v3.0.0+incompatible/go.mod h1:XtSnn+n/sHqQIpZ10K1qAevBhOOCWBLXXy3hyiqqBrY=
+github.com/cactus/go-statsd-client v3.1.0+incompatible h1:jtloShmaP/MkAW68aaWwQZrzlOUXVLudFmBQsskTs7A=
+github.com/cactus/go-statsd-client v3.1.0+incompatible/go.mod h1:cMRcwZDklk7hXp+Law83urTHUiHMzCev/r4JMYr/zU0=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/freerware/negotiator v0.2.0 h1:LIoaL4lH6Hi19Nk1slkR/DY1K8lOWv6ef24dUi83YMg=
 github.com/freerware/negotiator v0.2.0/go.mod h1:dcIB41Djt1Ui0rXPnLXRpmBaP7pCLaNJiYTClBG0P9k=
-github.com/freerware/work v2.0.1+incompatible h1:1WngfPeKzMZdKJ8fyh/rZdLWIuLtQb0FxOlo97c2Gzg=
-github.com/freerware/work v2.0.1+incompatible/go.mod h1:s06LnzELdVvk45sCk0HilaaqQqMNKYunFZ5z310PUb0=
 github.com/freerware/work/v4 v4.0.0-beta h1:3o/+BYqNy9iUPi24Lbb+m+xrRn2bjAIa4hg3rus+K2E=
 github.com/freerware/work/v4 v4.0.0-beta/go.mod h1:Cdv4PmSy0zXjZrOC0gaXIlbglkP91XVdWj1MXiQy204=
 github.com/freerware/workfx/v4 v4.0.0-20210117042742-a219b58a7eb3 h1:THCF6rWq+SypZJQae0i7WJB1qlq8XQNjyTCnP63oXac=

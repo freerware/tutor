@@ -11,3 +11,9 @@ database:
     parseTime: ${DB_PARSE_TIME}
     charset: ${DB_CHARSET}
 
+metrics:
+    host: ${REPORTING_HOST}
+    port: ${REPORTING_PORT}
+    prefix: tutor
+    maxFlushInterval: ${REPORTING_MAX_FLUSH_INTERVAL}
+    maxFlushBytes: ${REPORTING_MAX_FLUSH_BYTES}
