@@ -8,7 +8,7 @@ import (
 	"github.com/avast/retry-go"
 	"github.com/cactus/go-statsd-client/statsd"
 	"github.com/freerware/tutor/config"
-	"github.com/freerware/tutor/domain"
+	"github.com/freerware/tutor/infrastructure/models"
 	"github.com/freerware/work/v4/unit"
 	"github.com/freerware/workfx/v4"
 	_ "github.com/go-sql-driver/mysql"
@@ -81,10 +81,10 @@ var Module = fx.Options(
 		}, time.Second)
 		return scope, nil
 	}),
-	fx.Provide(func(l *zap.Logger) UnitResult {
+	fx.Provide(func(l *zap.Logger, c config.Configuration) UnitResult {
 		dataMappers := make(map[unit.TypeName]unit.DataMapper)
-		accountTN := unit.TypeNameOf(domain.Account{})
-		dm := NewAccountDataMapper(AccountDataMapperParameters{Logger: l})
+		accountTN := unit.TypeNameOf(models.Account{})
+		dm := NewAccountDataMapper(AccountDataMapperParameters{DSN: c.Database.DSN(), Logger: l})
 		dataMappers[accountTN] = &dm
 		return UnitResult{Option: unit.DataMappers(dataMappers)}
 	}),

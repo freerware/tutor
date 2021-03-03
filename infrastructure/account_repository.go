@@ -59,7 +59,7 @@ func (r *accountRepository) Put(account domain.Account) error {
 	}
 
 	// otherwise, replace the existing state.
-	return r.unit.Alter(account)
+	return r.unit.Alter(account.ToModel())
 }
 
 func (r *accountRepository) Remove(account domain.Account) error {
@@ -76,7 +76,7 @@ func (r *accountRepository) Remove(account domain.Account) error {
 	}
 
 	// otherwise, remove the account.
-	r.unit.Remove(c)
+	r.unit.Remove(c.ToModel())
 	return nil
 }
 
@@ -94,7 +94,7 @@ func (r *accountRepository) Add(account domain.Account) error {
 	}
 
 	// otherwise, remove the account.
-	r.unit.Add(account)
+	r.unit.Add(account.ToModel())
 	return nil
 }
 

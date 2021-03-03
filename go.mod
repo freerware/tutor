@@ -20,5 +20,7 @@ require (
 	golang.org/x/lint v0.0.0-20201208152925-83fdc39ff7b5 // indirect
 	golang.org/x/tools v0.0.0-20210115202250-e0d201561e39 // indirect
 	google.golang.org/protobuf v1.20.1
+	gorm.io/driver/mysql v1.0.4
+	gorm.io/gorm v1.20.12
 	honnef.co/go/tools v0.1.0 // indirect
 )

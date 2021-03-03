@@ -4,7 +4,9 @@ import (
 	"errors"
 	"time"
 
+	"github.com/freerware/tutor/infrastructure/models"
 	u "github.com/gofrs/uuid"
+	"gorm.io/gorm"
 )
 
 // Errors that are potentially thrown during account interactions.
@@ -140,4 +142,25 @@ func (a *Account) SetDeletedAt(t time.Time) error {
 	}
 	a.deletedAt = &t
 	return nil
+}
+
+func (a Account) ToModel() models.Account {
+	var deletedAt time.Time
+	if a.DeletedAt() != nil {
+		deletedAt = *a.DeletedAt()
+	}
+	return models.Account{
+		Model: models.Model{
+			UUID:      a.UUID(),
+			CreatedAt: a.CreatedAt(),
+			UpdatedAt: a.UpdatedAt(),
+			DeletedAt: gorm.DeletedAt{
+				Time:  deletedAt,
+				Valid: a.DeletedAt() != nil,
+			},
+		},
+		GivenName: a.GivenName(),
+		Surname:   a.Surname(),
+		Username:  a.Username(),
+	}
 }
