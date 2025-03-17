@@ -1,7 +1,6 @@
 package resources
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -116,8 +115,7 @@ func (ar *AccountResource) CreateAndAppend(
 	}
 
 	// create the account.
-	ctx := context.Background()
-	err = ar.accountService.Create(ctx, account)
+	err = ar.accountService.Create(request.Context(), account)
 	if err != nil {
 		http.Error(w, err.Error(), 500)
 		return
@@ -159,15 +157,15 @@ func (ar *AccountResource) Replace(w http.ResponseWriter, request *http.Request)
 	}
 
 	// retrieve the account.
-	_, err = ar.accountService.Get(uuid)
+	existing, err := ar.accountService.Get(uuid)
 	if err != nil {
 		http.Error(w, err.Error(), 404)
 		return
 	}
 
 	// upsert the account.
-	ctx := context.Background()
-	err = ar.accountService.Put(ctx, account)
+	account.SetCreatedAt(existing.CreatedAt())
+	err = ar.accountService.Put(request.Context(), account)
 	if err != nil {
 		http.Error(w, err.Error(), 500)
 		return
@@ -188,8 +186,7 @@ func (ar *AccountResource) Delete(w http.ResponseWriter, request *http.Request) 
 	}
 
 	// delete the account.
-	ctx := context.Background()
-	err = ar.accountService.Delete(ctx, account)
+	err = ar.accountService.Delete(request.Context(), account)
 	if err != nil {
 		http.Error(w, err.Error(), 500)
 		return
