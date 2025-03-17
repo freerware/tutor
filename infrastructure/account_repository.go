@@ -76,7 +76,7 @@ func (r *accountRepository) Remove(account domain.Account) error {
 	}
 
 	// otherwise, remove the account.
-	r.unit.Remove(c)
+	r.unit.Remove(*c)
 	return nil
 }
 
