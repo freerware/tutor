@@ -1,8 +1,8 @@
-FROM golang:1.13
+FROM golang:1.21
 
 # labels.
 LABEL maintainer="Jon Freer"
-LABEL maintainer="freerjm@miamioh.edu"
+LABEL maintainer="github@fr33r.com"
 
 # transfer binary and configuration file.
 COPY tutor /go
