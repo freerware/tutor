@@ -6,7 +6,7 @@
 --header "Content-Type:application/json"
 
 # Body of the request.
---data @./put_notification.json
+--data @./put_account.json
 
 # PUT request.
 --config ../put.curl
