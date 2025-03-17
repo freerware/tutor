@@ -4,8 +4,8 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"strings"
 
+	"github.com/freerware/morph"
 	"github.com/freerware/tutor/domain"
 	"github.com/freerware/work/v4/unit"
 	"go.uber.org/fx"
@@ -30,11 +30,23 @@ type AccountDataMapperParameters struct {
 type AccountDataMapper struct {
 	db     *sql.DB
 	logger *zap.Logger
+	table  morph.Table
 }
 
-func NewAccountDataMapper(
-	parameters AccountDataMapperParameters) AccountDataMapper {
-	return AccountDataMapper{db: parameters.DB, logger: parameters.Logger}
+func NewAccountDataMapper(parameters AccountDataMapperParameters) AccountDataMapper {
+	opts := []morph.ReflectOption{
+		morph.WithPrimaryKeyColumn("UUID"),
+		morph.WithInferredTableName(morph.ScreamingSnakeCaseStrategy, false),
+		morph.WithInferredColumnNames(morph.ScreamingSnakeCaseStrategy),
+		morph.WithInferredTableAlias(morph.UpperCaseStrategy, 1),
+		morph.WithColumnNameMapping("Username", "PRIMARY_CREDENTIAL"),
+	}
+	t, err := morph.Reflect(domain.Account{}, opts...)
+	if err != nil {
+		panic(err)
+	}
+
+	return AccountDataMapper{db: parameters.DB, logger: parameters.Logger, table: t}
 }
 
 func (dm *AccountDataMapper) toAccount(accounts ...interface{}) ([]domain.Account, error) {
@@ -61,39 +73,37 @@ func (dm *AccountDataMapper) Insert(ctx context.Context, mCtx unit.MapperContext
 	return dm.insert(mCtx.Tx, accs...)
 }
 
-func (dm *AccountDataMapper) insertSQL(accounts ...domain.Account) (sql string, args []interface{}) {
-	sql =
-		`INSERT INTO ACCOUNT
-		(
-			UUID,
-			GIVEN_NAME,
-			SURNAME,
-			PRIMARY_CREDENTIAL,
-			CREATED_AT,
-			UPDATED_AT,
-			DELETED_AT
-		) VALUES `
-	var vals []string
-	for _, account := range accounts {
-		vals = append(vals, "(?, ?, ?, ?, ?, ?, ?)")
-		args = append(args,
-			account.UUID().String(),
-			account.GivenName(),
-			account.Surname(),
-			account.Username(),
-			account.CreatedAt(),
-			account.UpdatedAt(),
-			account.DeletedAt(),
-		)
+func (dm *AccountDataMapper) insertSQL(accounts ...domain.Account) (sql string, args [][]interface{}) {
+	var err error
+	sql, err = dm.table.InsertQuery()
+	if err != nil {
+		panic(err)
 	}
-	sql = sql + strings.Join(vals, ", ") + ";"
+
+	for _, account := range accounts {
+		sArgs := []interface{}{
+			account.CreatedAt(),
+			account.DeletedAt(),
+			account.GivenName(),
+			account.Username(),
+			account.Surname(),
+			account.UpdatedAt(),
+			account.UUID().String(),
+		}
+		args = append(args, sArgs)
+	}
 	return
 }
 
 func (dm *AccountDataMapper) insert(tx *sql.Tx, accounts ...domain.Account) error {
 	// insert accounts.
 	sql, args := dm.insertSQL(accounts...)
-	return dm.prepareAndExec(tx, sql, args)
+	for _, a := range args {
+		if err := dm.prepareAndExec(tx, sql, a); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func (dm *AccountDataMapper) Update(ctx context.Context, mCtx unit.MapperContext, accounts ...interface{}) error {
@@ -107,29 +117,21 @@ func (dm *AccountDataMapper) Update(ctx context.Context, mCtx unit.MapperContext
 	return dm.update(mCtx.Tx, accs...)
 }
 
-func (dm *AccountDataMapper) updateSQL(
-	accounts ...domain.Account) (sql []string, args [][]interface{}) {
+func (dm *AccountDataMapper) updateSQL(accounts ...domain.Account) (sql string, args [][]interface{}) {
+	var err error
+	sql, err = dm.table.UpdateQuery()
+	if err != nil {
+		panic(err)
+	}
+
 	for _, account := range accounts {
-		s :=
-			`UPDATE
-				ACCOUNT
-			SET
-				GIVEN_NAME = ?,
-				SURNAME = ?,
-				PRIMARY_CREDENTIAL = ?,
-				CREATED_AT = ?,
-				UPDATED_AT = ?,
-				DELETED_AT = ?
-			WHERE
-				UUID = ?`
-		sql = append(sql, s)
 		sArgs := []interface{}{
-			account.GivenName(),
-			account.Surname(),
-			account.Username(),
 			account.CreatedAt(),
-			account.UpdatedAt(),
 			account.DeletedAt(),
+			account.GivenName(),
+			account.Username(),
+			account.Surname(),
+			account.UpdatedAt(),
 			account.UUID().String(),
 		}
 		args = append(args, sArgs)
@@ -139,8 +141,8 @@ func (dm *AccountDataMapper) updateSQL(
 
 func (dm *AccountDataMapper) update(tx *sql.Tx, accounts ...domain.Account) error {
 	sql, args := dm.updateSQL(accounts...)
-	for idx, s := range sql {
-		if err := dm.prepareAndExec(tx, s, args[idx]); err != nil {
+	for _, a := range args {
+		if err := dm.prepareAndExec(tx, sql, a); err != nil {
 			return err
 		}
 	}
@@ -158,18 +160,27 @@ func (dm *AccountDataMapper) Delete(ctx context.Context, mCtx unit.MapperContext
 	return dm.delete(mCtx.Tx, accs...)
 }
 
-func (dm *AccountDataMapper) deleteSQL(
-	accounts ...domain.Account) (sql string, args []interface{}) {
-	sql = "DELETE FROM ACCOUNT WHERE UUID IN (?)"
+func (dm *AccountDataMapper) deleteSQL(accounts ...domain.Account) (sql string, args [][]interface{}) {
+	var err error
+	sql, err = dm.table.DeleteQuery()
+	if err != nil {
+		panic(err)
+	}
+
 	for _, account := range accounts {
-		args = append(args, account.UUID().String())
+		args = append(args, []interface{}{account.UUID().String()})
 	}
 	return
 }
 
 func (dm *AccountDataMapper) delete(tx *sql.Tx, accounts ...domain.Account) error {
 	sql, args := dm.deleteSQL(accounts...)
-	return dm.prepareAndExec(tx, sql, args)
+	for _, a := range args {
+		if err := dm.prepareAndExec(tx, sql, a); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func (dm *AccountDataMapper) prepareAndExec(
