@@ -1,3 +1,5 @@
+filippo.io/edwards25519 v1.1.0 h1:FNf4tywRC1HmFuKW5xopWpigGjJKiJSV0Cqo0cJWDaA=
+filippo.io/edwards25519 v1.1.0/go.mod h1:BxyFTGdWcka3PhytdK4V28tE5sGfRvvvRV7EaN4VDT4=
 github.com/BurntSushi/toml v0.3.1 h1:WXkYYl6Yr3qBf1K79EBnL4mak0OimBfB0XUf9Vl28OQ=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/DATA-DOG/go-sqlmock v1.3.3/go.mod h1:f/Ixk793poVmq4qj/V1dPUg2JEAKC73Q5eFN3EC/SaM=
@@ -10,8 +12,8 @@ github.com/cactus/go-statsd-client v3.1.0+incompatible/go.mod h1:cMRcwZDklk7hXp+
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/freerware/morph v1.2.0 h1:QB4yLHycHx2dEIy2hEOSn43tSlWBktzDYmBDSh88GpE=
-github.com/freerware/morph v1.2.0/go.mod h1:cjncK5HE8O3KK7yLPxuLEI8W6EQl/CQU0NmzPuAufi0=
+github.com/freerware/morph v1.3.0 h1:vsjDm/qqxY4X9BqJ6Fj45m7rRqKsHP9OduUPijDQZqo=
+github.com/freerware/morph v1.3.0/go.mod h1:cjncK5HE8O3KK7yLPxuLEI8W6EQl/CQU0NmzPuAufi0=
 github.com/freerware/negotiator v0.2.0 h1:LIoaL4lH6Hi19Nk1slkR/DY1K8lOWv6ef24dUi83YMg=
 github.com/freerware/negotiator v0.2.0/go.mod h1:dcIB41Djt1Ui0rXPnLXRpmBaP7pCLaNJiYTClBG0P9k=
 github.com/freerware/work/v4 v4.0.0-beta h1:3o/+BYqNy9iUPi24Lbb+m+xrRn2bjAIa4hg3rus+K2E=
@@ -20,8 +22,8 @@ github.com/freerware/workfx/v4 v4.0.0-20210117042742-a219b58a7eb3 h1:THCF6rWq+Sy
 github.com/freerware/workfx/v4 v4.0.0-20210117042742-a219b58a7eb3/go.mod h1:0sHGza48/jBZ5Bv6FwPODHV1ObjXOxPQXwtz0U40Hu0=
 github.com/gertd/go-pluralize v0.2.1 h1:M3uASbVjMnTsPb0PNqg+E/24Vwigyo/tvyMTtAlLgiA=
 github.com/gertd/go-pluralize v0.2.1/go.mod h1:rbYaKDbsXxmRfr8uygAEKhOWsjyrrqrkHVpZvoOp8zk=
-github.com/go-sql-driver/mysql v1.5.0 h1:ozyZYNQW3x3HtqT1jira07DN2PArx2v7/mN66gGcHOs=
-github.com/go-sql-driver/mysql v1.5.0/go.mod h1:DCzpHaOWr8IXmIStZouvnhqoel9Qv2LBy8hT2VhHyBg=
+github.com/go-sql-driver/mysql v1.8.1 h1:LedoTUt/eveggdHS9qUFC1EFSa8bU2+1pZjSRpvNJ1Y=
+github.com/go-sql-driver/mysql v1.8.1/go.mod h1:wEBSXgmK//2ZFJyE+qWnIsVGmvmEKlqwuVSjsCm7DZg=
 github.com/go-yaml/yaml v2.1.0+incompatible h1:RYi2hDdss1u4YE7GwixGzWwVo47T8UQwnTLB6vQiq+o=
 github.com/go-yaml/yaml v2.1.0+incompatible/go.mod h1:w2MrLa16VYP0jy6N7M5kHaCkaLENm+P+Tv+MfurjSw0=
 github.com/gofrs/uuid v3.2.0+incompatible h1:y12jRkkFxsd7GpqdSZ+/KCs/fJbqpEXSGd4+jfEaewE=

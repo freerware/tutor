@@ -5,11 +5,11 @@ go 1.21
 require (
 	github.com/avast/retry-go v3.0.0+incompatible
 	github.com/cactus/go-statsd-client v3.1.0+incompatible
-	github.com/freerware/morph v1.2.0
+	github.com/freerware/morph v1.3.0
 	github.com/freerware/negotiator v0.2.0
 	github.com/freerware/work/v4 v4.0.0-beta
 	github.com/freerware/workfx/v4 v4.0.0-20210117042742-a219b58a7eb3
-	github.com/go-sql-driver/mysql v1.5.0
+	github.com/go-sql-driver/mysql v1.8.1
 	github.com/go-yaml/yaml v2.1.0+incompatible
 	github.com/gofrs/uuid v3.2.0+incompatible
 	github.com/golang/protobuf v1.4.0-rc.4
@@ -21,6 +21,7 @@ require (
 )
 
 require (
+	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/gertd/go-pluralize v0.2.1 // indirect
 	github.com/iancoleman/strcase v0.3.0 // indirect
 	github.com/stretchr/stew v0.0.0-20130812190256-80ef0842b48b // indirect

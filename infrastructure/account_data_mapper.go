@@ -46,150 +46,75 @@ func NewAccountDataMapper(parameters AccountDataMapperParameters) AccountDataMap
 		panic(err)
 	}
 
-	return AccountDataMapper{db: parameters.DB, logger: parameters.Logger, table: t}
-}
-
-func (dm *AccountDataMapper) toAccount(accounts ...interface{}) ([]domain.Account, error) {
-	accs := []domain.Account{}
-	for _, account := range accounts {
-		var acc domain.Account
-		var ok bool
-		if acc, ok = account.(domain.Account); !ok {
-			return []domain.Account{}, ErrInvalidType
-		}
-		accs = append(accs, acc)
+	return AccountDataMapper{
+		db:     parameters.DB,
+		logger: parameters.Logger,
+		table:  t,
 	}
-	return accs, nil
 }
 
 func (dm *AccountDataMapper) Insert(ctx context.Context, mCtx unit.MapperContext, accounts ...interface{}) error {
-	if len(accounts) == 0 {
-		return nil
-	}
-	accs, err := dm.toAccount(accounts...)
-	if err != nil {
-		return err
-	}
-	return dm.insert(mCtx.Tx, accs...)
-}
-
-func (dm *AccountDataMapper) insertSQL(accounts ...domain.Account) (sql string, args [][]interface{}) {
-	var err error
-	sql, err = dm.table.InsertQuery()
-	if err != nil {
-		panic(err)
-	}
-
 	for _, account := range accounts {
-		sArgs := []interface{}{
-			account.CreatedAt(),
-			account.DeletedAt(),
-			account.GivenName(),
-			account.Username(),
-			account.Surname(),
-			account.UpdatedAt(),
-			account.UUID().String(),
+		sql, args, err := dm.table.InsertQueryWithArgs(account)
+		if err != nil {
+			return err
 		}
-		args = append(args, sArgs)
-	}
-	return
-}
 
-func (dm *AccountDataMapper) insert(tx *sql.Tx, accounts ...domain.Account) error {
-	// insert accounts.
-	sql, args := dm.insertSQL(accounts...)
-	for _, a := range args {
-		if err := dm.prepareAndExec(tx, sql, a); err != nil {
+		stmt, err := mCtx.Tx.Prepare(sql)
+		if err != nil {
+			return err
+		}
+		defer stmt.Close()
+
+		_, err = stmt.ExecContext(ctx, args...)
+		if err != nil {
 			return err
 		}
 	}
+
 	return nil
 }
 
 func (dm *AccountDataMapper) Update(ctx context.Context, mCtx unit.MapperContext, accounts ...interface{}) error {
-	if len(accounts) == 0 {
-		return nil
-	}
-	accs, err := dm.toAccount(accounts...)
-	if err != nil {
-		return err
-	}
-	return dm.update(mCtx.Tx, accs...)
-}
-
-func (dm *AccountDataMapper) updateSQL(accounts ...domain.Account) (sql string, args [][]interface{}) {
-	var err error
-	sql, err = dm.table.UpdateQuery()
-	if err != nil {
-		panic(err)
-	}
-
 	for _, account := range accounts {
-		sArgs := []interface{}{
-			account.CreatedAt(),
-			account.DeletedAt(),
-			account.GivenName(),
-			account.Username(),
-			account.Surname(),
-			account.UpdatedAt(),
-			account.UUID().String(),
+		sql, args, err := dm.table.UpdateQueryWithArgs(account)
+		if err != nil {
+			return err
 		}
-		args = append(args, sArgs)
-	}
-	return
-}
 
-func (dm *AccountDataMapper) update(tx *sql.Tx, accounts ...domain.Account) error {
-	sql, args := dm.updateSQL(accounts...)
-	for _, a := range args {
-		if err := dm.prepareAndExec(tx, sql, a); err != nil {
+		stmt, err := mCtx.Tx.Prepare(sql)
+		if err != nil {
+			return err
+		}
+		defer stmt.Close()
+
+		_, err = stmt.ExecContext(ctx, args...)
+		if err != nil {
 			return err
 		}
 	}
+
 	return nil
 }
 
 func (dm *AccountDataMapper) Delete(ctx context.Context, mCtx unit.MapperContext, accounts ...interface{}) error {
-	if len(accounts) == 0 {
-		return nil
-	}
-	accs, err := dm.toAccount(accounts...)
-	if err != nil {
-		return err
-	}
-	return dm.delete(mCtx.Tx, accs...)
-}
-
-func (dm *AccountDataMapper) deleteSQL(accounts ...domain.Account) (sql string, args [][]interface{}) {
-	var err error
-	sql, err = dm.table.DeleteQuery()
-	if err != nil {
-		panic(err)
-	}
-
 	for _, account := range accounts {
-		args = append(args, []interface{}{account.UUID().String()})
-	}
-	return
-}
+		sql, args, err := dm.table.DeleteQueryWithArgs(account)
+		if err != nil {
+			return err
+		}
 
-func (dm *AccountDataMapper) delete(tx *sql.Tx, accounts ...domain.Account) error {
-	sql, args := dm.deleteSQL(accounts...)
-	for _, a := range args {
-		if err := dm.prepareAndExec(tx, sql, a); err != nil {
+		stmt, err := mCtx.Tx.Prepare(sql)
+		if err != nil {
+			return err
+		}
+		defer stmt.Close()
+
+		_, err = stmt.ExecContext(ctx, args...)
+		if err != nil {
 			return err
 		}
 	}
-	return nil
-}
 
-func (dm *AccountDataMapper) prepareAndExec(
-	tx *sql.Tx, sql string, args []interface{}) error {
-	s, err := tx.Prepare(sql)
-	if err != nil {
-		return err
-	}
-	defer s.Close()
-	_, err = s.Exec(args...)
-	return err
+	return nil
 }
