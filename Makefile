@@ -1,26 +1,26 @@
 all: start
 
 start: bins
-	@docker-compose --file ./docker/docker-compose.yaml up
+	@docker compose --file ./docker/docker-compose.yaml up
 
 start-detached: bins
-	@docker-compose --file ./docker/docker-compose.yaml up -d
+	@docker compose --file ./docker/docker-compose.yaml up -d
 
 bins:
 	@GO111MODULE=on go build .
 
 restart:
-	@docker-compose --file ./docker/docker-compose.yaml restart
+	@docker compose --file ./docker/docker-compose.yaml restart
 
 down:
-	@docker-compose --file ./docker/docker-compose.yaml down 
+	@docker compose --file ./docker/docker-compose.yaml down 
 
 clean: down 
 	@docker image rm docker_tutor
 	@GO111MODULE=on go clean -x
 
 logs:
-	@docker-compose --file ./docker/docker-compose.yaml logs
+	@docker compose --file ./docker/docker-compose.yaml logs
 
 local: export SERVER_HOST=0.0.0.0
 local: export SERVER_PORT=8000
@@ -37,11 +37,12 @@ local: export REPORTING_MAX_FLUSH_INTERVAL=150
 local: export REPORTING_MAX_FLUSH_BYTES=512
 
 local: bins
-	@docker-compose --file ./docker/docker-compose.debug.yaml up -d
+	@docker compose --file ./docker/docker-compose.debug.yaml up -d
 	./tutor
+	# nvim main.go
 
 debug: bins
-	@docker-compose --file ./docker/docker-compose.debug.yaml up -d
+	@docker compose --file ./docker/docker-compose.debug.yaml up -d
 
 debug-db: debug
 	@docker exec -it docker_tutor-db_1 mysql -u web_app -p
