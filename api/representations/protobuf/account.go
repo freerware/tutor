@@ -23,14 +23,14 @@ type Account struct {
 
 // NewAccount constructs a new account representation.
 func NewAccount(a domain.Account) Account {
-	marshaller := func(in interface{}) ([]byte, error) {
+	marshaller := func(in any) ([]byte, error) {
 		message, ok := in.(proto.Message)
 		if !ok {
 			return []byte{}, errors.New("must provide Protobuf message to marshal successfully")
 		}
 		return proto.Marshal(message)
 	}
-	unmarshaller := func(b []byte, out interface{}) error {
+	unmarshaller := func(b []byte, out any) error {
 		message, ok := out.(proto.Message)
 		if !ok {
 			return errors.New("must provide Protobuf message to unmarshal successfully")

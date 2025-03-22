@@ -169,7 +169,7 @@ func file_github_com_freerware_tutor_api_representations_protobuf_gen_tutor_prot
 }
 
 var file_github_com_freerware_tutor_api_representations_protobuf_gen_tutor_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
-var file_github_com_freerware_tutor_api_representations_protobuf_gen_tutor_proto_goTypes = []interface{}{
+var file_github_com_freerware_tutor_api_representations_protobuf_gen_tutor_proto_goTypes = []any{
 	(*Account)(nil),             // 0: tutor.Account
 	(*timestamp.Timestamp)(nil), // 1: google.protobuf.Timestamp
 }
@@ -190,7 +190,7 @@ func file_github_com_freerware_tutor_api_representations_protobuf_gen_tutor_prot
 		return
 	}
 	if !protoimpl.UnsafeEnabled {
-		file_github_com_freerware_tutor_api_representations_protobuf_gen_tutor_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
+		file_github_com_freerware_tutor_api_representations_protobuf_gen_tutor_proto_msgTypes[0].Exporter = func(v any, i int) any {
 			switch v := v.(*Account); i {
 			case 0:
 				return &v.state

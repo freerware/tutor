@@ -53,7 +53,7 @@ func (q findAccountByUUID) accounts() ([]domain.Account, error) {
 			deletedAt                             mysql.NullTime
 		)
 
-		fields := []interface{}{
+		fields := []any{
 			&uuid,
 			&givenName,
 			&surname,

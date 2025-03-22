@@ -8,7 +8,7 @@ import (
 	"github.com/go-yaml/yaml"
 )
 
-func _New(filePath string, configuration interface{}) error {
+func _New(filePath string, configuration any) error {
 
 	// read in the contents of the configuration file.
 	fileContents, err := ioutil.ReadFile(filePath)

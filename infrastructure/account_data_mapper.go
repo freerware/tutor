@@ -53,7 +53,7 @@ func NewAccountDataMapper(parameters AccountDataMapperParameters) AccountDataMap
 	}
 }
 
-func (dm *AccountDataMapper) Insert(ctx context.Context, mCtx unit.MapperContext, accounts ...interface{}) error {
+func (dm *AccountDataMapper) Insert(ctx context.Context, mCtx unit.MapperContext, accounts ...any) error {
 	for _, account := range accounts {
 		sql, args, err := dm.table.InsertQueryWithArgs(account)
 		if err != nil {
@@ -75,7 +75,7 @@ func (dm *AccountDataMapper) Insert(ctx context.Context, mCtx unit.MapperContext
 	return nil
 }
 
-func (dm *AccountDataMapper) Update(ctx context.Context, mCtx unit.MapperContext, accounts ...interface{}) error {
+func (dm *AccountDataMapper) Update(ctx context.Context, mCtx unit.MapperContext, accounts ...any) error {
 	for _, account := range accounts {
 		sql, args, err := dm.table.UpdateQueryWithArgs(account)
 		if err != nil {
@@ -97,7 +97,7 @@ func (dm *AccountDataMapper) Update(ctx context.Context, mCtx unit.MapperContext
 	return nil
 }
 
-func (dm *AccountDataMapper) Delete(ctx context.Context, mCtx unit.MapperContext, accounts ...interface{}) error {
+func (dm *AccountDataMapper) Delete(ctx context.Context, mCtx unit.MapperContext, accounts ...any) error {
 	for _, account := range accounts {
 		sql, args, err := dm.table.DeleteQueryWithArgs(account)
 		if err != nil {
