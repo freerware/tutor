@@ -45,4 +45,15 @@ debug: bins
 	@docker compose --file ./docker/docker-compose.debug.yaml up -d
 
 debug-db: debug
-	@docker exec -it docker_tutor-db_1 mysql -u web_app -p
+	@docker compose --file docker/docker-compose.debug.yaml exec tutor-db mysql --user web_app --password tutor
+
+migration: export GOOSE_MIGRATION_DIR=./infrastructure/migrations
+
+migration:
+	@goose create $(GOOSE_MIGRATION_NAME) sql
+
+migrate:
+	@goose -dir infrastructure/migrations mysql "web_app:web_app_password@tcp(0.0.0.0:3306)/tutor?parseTime=true" up
+
+rollback:
+	@goose -dir infrastructure/migrations mysql "web_app:web_app_password@tcp(0.0.0.0:3306)/tutor?parseTime=true" down
