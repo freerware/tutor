@@ -12,8 +12,8 @@ github.com/cactus/go-statsd-client v3.1.0+incompatible/go.mod h1:cMRcwZDklk7hXp+
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/freerware/morph v1.3.0 h1:vsjDm/qqxY4X9BqJ6Fj45m7rRqKsHP9OduUPijDQZqo=
-github.com/freerware/morph v1.3.0/go.mod h1:cjncK5HE8O3KK7yLPxuLEI8W6EQl/CQU0NmzPuAufi0=
+github.com/freerware/morph v1.4.0 h1:OqMtY/wSd1Vkbp9dzCxVHDCQGQtiT9hWKlT97z+4N4M=
+github.com/freerware/morph v1.4.0/go.mod h1:cjncK5HE8O3KK7yLPxuLEI8W6EQl/CQU0NmzPuAufi0=
 github.com/freerware/negotiator v0.2.0 h1:LIoaL4lH6Hi19Nk1slkR/DY1K8lOWv6ef24dUi83YMg=
 github.com/freerware/negotiator v0.2.0/go.mod h1:dcIB41Djt1Ui0rXPnLXRpmBaP7pCLaNJiYTClBG0P9k=
 github.com/freerware/work/v4 v4.0.0-beta h1:3o/+BYqNy9iUPi24Lbb+m+xrRn2bjAIa4hg3rus+K2E=

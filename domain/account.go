@@ -1,19 +1,9 @@
 package domain
 
 import (
-	"errors"
 	"time"
 
 	u "github.com/gofrs/uuid"
-)
-
-// Errors that are potentially thrown during account interactions.
-var (
-	ErrFutureCreatedAt  = errors.New("domain: account creation time cannot be in the future")
-	ErrFutureUpdatedAt  = errors.New("domain: account modification time cannot be in the future")
-	ErrInvalidUpdatedAt = errors.New("domain: account modification time cannot be prior to account creation time")
-	ErrFutureDeletedAt  = errors.New("domain: account deleton time cannot be in the future")
-	ErrInvalidDeletedAt = errors.New("domain: account deletion time cannot be prior to account creation or modification time")
 )
 
 type Account struct {
@@ -21,6 +11,7 @@ type Account struct {
 	givenName string
 	surname   string
 	username  string
+	posts     []Post
 	createdAt time.Time
 	updatedAt time.Time
 	deletedAt *time.Time
@@ -31,6 +22,7 @@ type AccountParameters struct {
 	GivenName string
 	Surname   string
 	Username  string
+	Posts     []Post
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt *time.Time
@@ -42,6 +34,7 @@ func NewAccount(parameters AccountParameters) (Account, error) {
 	account.SetGivenName(parameters.GivenName)
 	account.SetSurname(parameters.Surname)
 	account.SetUsername(parameters.Username)
+	account.SetPosts(parameters.Posts)
 	if err := account.SetCreatedAt(parameters.CreatedAt); err != nil {
 		return Account{}, err
 	}
@@ -65,6 +58,7 @@ func ReconstituteAccount(parameters AccountParameters) Account {
 		createdAt: parameters.CreatedAt,
 		updatedAt: parameters.UpdatedAt,
 		deletedAt: parameters.DeletedAt,
+		posts:     parameters.Posts,
 	}
 }
 
@@ -98,6 +92,41 @@ func (a Account) Username() string {
 
 func (a *Account) SetUsername(username string) {
 	a.username = username
+}
+
+func (a Account) Posts() []Post {
+	c := make([]Post, len(a.posts))
+	copy(c, a.posts)
+	return c
+}
+
+func (a *Account) SetPosts(posts []Post) {
+	c := make([]Post, len(posts))
+	copy(c, posts)
+	for _, post := range c {
+		post.SetAuthorUUID(a.UUID())
+	}
+	a.posts = c
+}
+
+func (a Account) AddPost(post Post) {
+	post.SetAuthorUUID(a.UUID())
+	a.posts = append(a.posts, post)
+}
+
+func (a *Account) AddPosts(posts ...Post) {
+	for _, post := range posts {
+		a.AddPost(post)
+	}
+}
+
+func (a *Account) HasPost(post Post) bool {
+	for _, p := range a.posts {
+		if p.UUID() == post.UUID() {
+			return true
+		}
+	}
+	return false
 }
 
 func (a Account) CreatedAt() time.Time {
