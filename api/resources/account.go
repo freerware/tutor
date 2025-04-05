@@ -100,13 +100,35 @@ func (ar *AccountResource) CreateAndAppend(
 		return
 	}
 
+	now := time.Now()
+	posts := []domain.Post{}
+	accountUUID := u.Must(u.NewV4())
+	for _, post := range representation.Posts {
+		p, err := domain.NewPost(domain.PostParameters{
+			UUID:       u.Must(u.NewV4()),
+			Title:      post.Title,
+			Content:    post.Content,
+			Draft:      post.Draft,
+			AuthorUUID: accountUUID,
+			CreatedAt:  now,
+			UpdatedAt:  now,
+			DeletedAt:  nil,
+		})
+		if err != nil {
+			http.Error(w, err.Error(), 500)
+			return
+		}
+
+		posts = append(posts, p)
+	}
 	account, err := domain.NewAccount(domain.AccountParameters{
-		UUID:      u.Must(u.NewV4()),
+		UUID:      accountUUID,
 		GivenName: representation.GivenName,
 		Surname:   representation.Surname,
 		Username:  representation.PrimaryCredential,
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
+		Posts:     posts,
+		CreatedAt: now,
+		UpdatedAt: now,
 		DeletedAt: nil,
 	})
 	if err != nil {
@@ -136,13 +158,32 @@ func (ar *AccountResource) Replace(w http.ResponseWriter, request *http.Request)
 		return
 	}
 
+	now := time.Now()
+	posts := []domain.Post{}
+	for _, post := range representation.Posts {
+		p, err := domain.NewPost(domain.PostParameters{
+			UUID:       u.Must(u.NewV4()),
+			Title:      post.Title,
+			Content:    post.Content,
+			Draft:      post.Draft,
+			AuthorUUID: representation.UUID,
+			UpdatedAt:  now,
+		})
+		if err != nil {
+			http.Error(w, err.Error(), 500)
+			return
+		}
+
+		posts = append(posts, p)
+	}
 	account, err := domain.NewAccount(domain.AccountParameters{
 		UUID:      representation.UUID,
 		GivenName: representation.GivenName,
 		Surname:   representation.Surname,
 		Username:  representation.PrimaryCredential,
+		Posts:     posts,
 		CreatedAt: representation.CreatedAt,
-		UpdatedAt: time.Now(),
+		UpdatedAt: now,
 		DeletedAt: nil,
 	})
 	if err != nil {

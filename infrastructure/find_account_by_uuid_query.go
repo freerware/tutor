@@ -2,10 +2,8 @@ package infrastructure
 
 import (
 	"database/sql"
-	"time"
 
 	"github.com/freerware/tutor/domain"
-	"github.com/go-sql-driver/mysql"
 	u "github.com/gofrs/uuid"
 )
 
@@ -31,11 +29,10 @@ func (q *findAccountByUUID) Execute() ([]domain.Account, error) {
 }
 
 func (q findAccountByUUID) accounts() ([]domain.Account, error) {
-
-	var matches []domain.Account
-	statement, err := q.db.Prepare("SELECT * FROM ACCOUNT WHERE UUID = ?")
+	matches := []domain.Account{}
+	statement, err := q.db.Prepare("SELECT CREATED_AT, DELETED_AT, GIVEN_NAME, PRIMARY_CREDENTIAL, SURNAME, UPDATED_AT, UUID FROM ACCOUNT WHERE UUID = ?")
 	if err != nil {
-		return []domain.Account{}, err
+		return matches, err
 	}
 	defer statement.Close()
 
@@ -46,36 +43,52 @@ func (q findAccountByUUID) accounts() ([]domain.Account, error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		var (
-			uuid                                  u.UUID
-			givenName, surname, primaryCredential string
-			updatedAt, createdAt                  time.Time
-			deletedAt                             mysql.NullTime
+		var params domain.AccountParameters
+		err = rows.Scan(
+			&params.CreatedAt,
+			&params.DeletedAt,
+			&params.GivenName,
+			&params.Username,
+			&params.Surname,
+			&params.UpdatedAt,
+			&params.UUID,
 		)
-
-		fields := []any{
-			&uuid,
-			&givenName,
-			&surname,
-			&primaryCredential,
-			&createdAt,
-			&updatedAt,
-			&deletedAt,
-		}
-		if err := rows.Scan(fields...); err != nil {
+		if err != nil {
 			return matches, err
 		}
+		a := domain.ReconstituteAccount(params)
 
-		a := domain.Account{}
-		a.SetUUID(uuid)
-		a.SetUsername(primaryCredential)
-		a.SetGivenName(givenName)
-		a.SetSurname(surname)
-		a.SetCreatedAt(createdAt)
-		a.SetUpdatedAt(updatedAt)
-		if deletedAt.Valid {
-			a.SetDeletedAt(deletedAt.Time)
+		pStatement, err := q.db.Prepare("SELECT AUTHOR_UUID, CREATED_AT, DELETED_AT, DRAFT, LIKE_COUNT, UPDATED_AT, UUID, TITLE, CONTENT FROM POST WHERE AUTHOR_UUID = ?;")
+		if err != nil {
+			return matches, err
 		}
+		defer pStatement.Close()
+
+		pRows, err := pStatement.Query(q.uuid.String())
+		if err != nil {
+			return matches, err
+		}
+		defer pRows.Close()
+
+		for pRows.Next() {
+			var params domain.PostParameters
+			err = pRows.Scan(
+				&params.AuthorUUID,
+				&params.CreatedAt,
+				&params.DeletedAt,
+				&params.Draft,
+				&params.Likes,
+				&params.UpdatedAt,
+				&params.UUID,
+				&params.Title,
+				&params.Content,
+			)
+			if err != nil {
+				return matches, err
+			}
+			a.AddPost(domain.ReconstitutePost(params))
+		}
+
 		matches = append(matches, a)
 	}
 	return matches, nil

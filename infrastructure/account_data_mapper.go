@@ -43,6 +43,7 @@ func NewAccountDataMapper(parameters AccountDataMapperParameters) AccountDataMap
 		morph.WithInferredColumnNames(morph.ScreamingSnakeCaseStrategy),
 		morph.WithInferredTableAlias(morph.UpperCaseStrategy, 1),
 		morph.WithColumnNameMapping("Username", "PRIMARY_CREDENTIAL"),
+		morph.WithoutMethods("HasPost", "Posts", "AddPost", "AddPosts"),
 	}
 	at := morph.Must(morph.Reflect(domain.Account{}, opts...))
 
@@ -167,7 +168,7 @@ func (dm *AccountDataMapper) Insert(ctx context.Context, mCtx unit.MapperContext
 			return err
 		}
 
-		acc := account.(*domain.Account)
+		acc := account.(domain.Account)
 		for _, post := range acc.Posts() {
 			sql, args, err := dm.postsTable.InsertQueryWithArgs(post)
 			if err != nil {
@@ -208,7 +209,7 @@ func (dm *AccountDataMapper) Update(ctx context.Context, mCtx unit.MapperContext
 			return err
 		}
 
-		acc := account.(*domain.Account)
+		acc := account.(domain.Account)
 		before, err := dm.Find(ctx, mCtx, acc.UUID())
 		if err != nil {
 			return err
@@ -299,7 +300,7 @@ func (dm *AccountDataMapper) Delete(ctx context.Context, mCtx unit.MapperContext
 			return err
 		}
 
-		acc := account.(*domain.Account)
+		acc := account.(domain.Account)
 		for _, post := range acc.Posts() {
 			sql, args, err := dm.postsTable.DeleteQueryWithArgs(post)
 			if err != nil {

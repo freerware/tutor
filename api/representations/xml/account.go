@@ -15,6 +15,7 @@ type Account struct {
 	PrimaryCredential string     `xml:"primaryCredential"`
 	GivenName         string     `xml:"givenName"`
 	Surname           string     `xml:"surname"`
+	Posts             []Post     `xml:"posts"`
 	CreatedAt         time.Time  `xml:"createdAt"`
 	UpdatedAt         time.Time  `xml:"updatedAt"`
 	DeletedAt         *time.Time `xml:"deletedAt"`
@@ -37,6 +38,7 @@ func NewAccount(a domain.Account) Account {
 		GivenName:         a.GivenName(),
 		Surname:           a.Surname(),
 		PrimaryCredential: a.Username(),
+		Posts:             NewPosts(a.Posts()...),
 		CreatedAt:         a.CreatedAt(),
 		UpdatedAt:         a.UpdatedAt(),
 		DeletedAt:         a.DeletedAt(),

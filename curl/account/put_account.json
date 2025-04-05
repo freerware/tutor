@@ -1,6 +1,20 @@
 {
-  "uuid": "04b8db89-cf81-47c8-ae26-b48ae60f1e09",
+  "uuid": "7117c87a-5fec-4fed-b836-a03524906ebd",
   "primaryCredential": "freer",
-  "givenName": "Jon",
-  "surname": "Freer"
+  "givenName": "Jonathon",
+  "surname": "Freer",
+  "posts": [
+    {
+      "title": "My first post",
+      "content": "This is my first post. I am excited to share my thoughts and experiences with you all!",
+      "draft": false,
+      "likes": 1
+    },
+    {
+      "title": "My viral post",
+      "content": "This is my viral post. People really liked this one!",
+      "draft": false,
+      "likes": 10000
+    }
+  ]
 }

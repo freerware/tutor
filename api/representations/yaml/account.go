@@ -15,6 +15,7 @@ type Account struct {
 	PrimaryCredential string     `yaml:"primaryCredential"`
 	GivenName         string     `yaml:"givenName"`
 	Surname           string     `yaml:"surname"`
+	Posts             []Post     `yaml:"posts"`
 	CreatedAt         time.Time  `yaml:"createdAt"`
 	UpdatedAt         time.Time  `yaml:"updatedAt"`
 	DeletedAt         *time.Time `yaml:"deletedAt"`
@@ -37,6 +38,7 @@ func NewAccount(a domain.Account) Account {
 		GivenName:         a.GivenName(),
 		Surname:           a.Surname(),
 		PrimaryCredential: a.Username(),
+		Posts:             NewPosts(a.Posts()...),
 		CreatedAt:         a.CreatedAt(),
 		UpdatedAt:         a.UpdatedAt(),
 		DeletedAt:         a.DeletedAt(),

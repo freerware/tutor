@@ -109,7 +109,7 @@ func (a *Account) SetPosts(posts []Post) {
 	a.posts = c
 }
 
-func (a Account) AddPost(post Post) {
+func (a *Account) AddPost(post Post) {
 	post.SetAuthorUUID(a.UUID())
 	a.posts = append(a.posts, post)
 }
