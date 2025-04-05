@@ -167,6 +167,7 @@ func (ar *AccountResource) Replace(w http.ResponseWriter, request *http.Request)
 			Content:    post.Content,
 			Draft:      post.Draft,
 			AuthorUUID: representation.UUID,
+			CreatedAt:  representation.CreatedAt,
 			UpdatedAt:  now,
 		})
 		if err != nil {

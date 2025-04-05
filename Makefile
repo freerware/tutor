@@ -38,8 +38,8 @@ local: export REPORTING_MAX_FLUSH_BYTES=512
 
 local: bins
 	@docker compose --file ./docker/docker-compose.debug.yaml up -d
-	./tutor
-	# nvim main.go
+	# ./tutor
+	nvim main.go
 
 debug: bins
 	@docker compose --file ./docker/docker-compose.debug.yaml up -d

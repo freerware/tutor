@@ -85,16 +85,14 @@ func (dm *AccountDataMapper) FindPosts(ctx context.Context, mCtx unit.MapperCont
 		var params domain.PostParameters
 		err = rows.Scan(
 			&params.AuthorUUID,
+			&params.Content,
 			&params.CreatedAt,
 			&params.DeletedAt,
 			&params.Draft,
 			&params.Likes,
+			&params.Title,
 			&params.UpdatedAt,
 			&params.UUID,
-			&params.Title,
-			&params.Content,
-			&params.Likes,
-			&params.Draft,
 		)
 		if err != nil {
 			return nil, err
@@ -106,7 +104,7 @@ func (dm *AccountDataMapper) FindPosts(ctx context.Context, mCtx unit.MapperCont
 }
 
 func (dm *AccountDataMapper) Find(ctx context.Context, mCtx unit.MapperContext, uuid uuid.UUID) (domain.Account, error) {
-	sql, args, err := dm.accountTable.SelectQueryWithArgs(uuid)
+	sql, err := dm.accountTable.SelectQuery()
 	if err != nil {
 		return domain.Account{}, err
 	}
@@ -115,16 +113,15 @@ func (dm *AccountDataMapper) Find(ctx context.Context, mCtx unit.MapperContext, 
 	if err != nil {
 		return domain.Account{}, err
 	}
-	defer stmt.Close()
 
-	rows, err := stmt.QueryContext(ctx, args...)
+	rows, err := stmt.QueryContext(ctx, uuid)
 	if err != nil {
+		stmt.Close()
 		return domain.Account{}, err
 	}
-	defer rows.Close()
 
+	var params domain.AccountParameters
 	if rows.Next() {
-		var params domain.AccountParameters
 		err = rows.Scan(
 			&params.CreatedAt,
 			&params.DeletedAt,
@@ -135,19 +132,19 @@ func (dm *AccountDataMapper) Find(ctx context.Context, mCtx unit.MapperContext, 
 			&params.UUID,
 		)
 		if err != nil {
+			rows.Close()
 			return domain.Account{}, err
 		}
-
-		posts, err := dm.FindPosts(ctx, mCtx, params.UUID)
-		if err != nil {
-			return domain.Account{}, err
-		}
-		params.Posts = posts
-
-		return domain.ReconstituteAccount(params), nil
 	}
+	rows.Close()
+	stmt.Close()
 
-	return domain.Account{}, nil
+	posts, err := dm.FindPosts(ctx, mCtx, params.UUID)
+	if err != nil {
+		return domain.Account{}, err
+	}
+	params.Posts = posts
+	return domain.ReconstituteAccount(params), nil
 }
 
 func (dm *AccountDataMapper) Insert(ctx context.Context, mCtx unit.MapperContext, accounts ...any) error {
